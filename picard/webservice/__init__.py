@@ -70,6 +70,7 @@ USER_AGENT_STRING = '%s-%s/%s (%s;%s-%s)' % (PICARD_ORG_NAME, PICARD_APP_NAME,
                                              platform.platform(),
                                              platform.python_implementation(),
                                              platform.python_version())
+FIREFOX_USER_AGENT_STRING = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:64.0) Gecko/20100101 Firefox/64.0'
 CLIENT_STRING = bytes(QUrl.toPercentEncoding('%s %s-%s' % (PICARD_ORG_NAME,
                                                            PICARD_APP_NAME,
                                                            PICARD_VERSION_STR))).decode()
@@ -148,7 +149,11 @@ class WSRequest(QNetworkRequest):
         self._init_headers()
 
     def _init_headers(self, high_prio_no_cache=False):
-        self.setHeader(QNetworkRequest.UserAgentHeader, USER_AGENT_STRING)
+        self.setRawHeader(b'Host', self.host.encode('utf-8'))
+        if 'anidb.net' in self.host:
+            self.setHeader(QNetworkRequest.UserAgentHeader, FIREFOX_USER_AGENT_STRING)
+        else:
+            self.setHeader(QNetworkRequest.UserAgentHeader, USER_AGENT_STRING)
 
         if self.mblogin or high_prio_no_cache:
             self.setPriority(QNetworkRequest.HighPriority)
