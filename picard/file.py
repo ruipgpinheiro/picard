@@ -499,11 +499,10 @@ class File(QtCore.QObject, Item):
         if not os.path.isdir(new_dirname):
             os.makedirs(new_dirname)
         tmp_filename = new_filename
-        i = 1
-        while (os.path.exists(new_filename + ext)
-               and not samefile(old_filename, new_filename + ext)):
-            new_filename = "%s (%d)" % (tmp_filename, i)
-            i += 1
+
+        if (os.path.exists(new_filename + ext)):
+            raise Exception('File already exists')
+
         new_filename = new_filename + ext
         log.debug("Moving file %r => %r", old_filename, new_filename)
         move_ensure_casing(old_filename, new_filename)
