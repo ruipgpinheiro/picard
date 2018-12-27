@@ -377,10 +377,9 @@ class File(QtCore.QObject, Item):
             os.makedirs(new_dirname)
         tmp_filename = new_filename
         i = 1
-        while (not pathcmp(old_filename, new_filename + ext) and
-               os.path.exists(new_filename + ext)):
-            new_filename = "%s (%d)" % (tmp_filename, i)
-            i += 1
+       	if (not pathcmp(old_filename, new_filename + ext) and os.path.exists(new_filename + ext)):
+            raise Exception('File already exists')
+
         new_filename = new_filename + ext
         log.debug("Moving file %r => %r", old_filename, new_filename)
         shutil.move(old_filename, new_filename)
@@ -428,7 +427,8 @@ class File(QtCore.QObject, Item):
                         log.debug("File loaded in the tagger, not moving %r", old_file)
                         continue
                     log.debug("Moving %r to %r", old_file, new_file)
-                    shutil.move(old_file, new_file)
+                    if os.path.exists(old_file):
+                        shutil.move(old_file, new_file)
 
     def remove(self, from_parent=True):
         if from_parent and self.parent:
