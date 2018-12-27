@@ -156,9 +156,12 @@ def strip_non_alnum(string):
     return _re_non_alphanum.sub(" ", string).strip()
 
 
-_re_slashes = re.compile(r'[\\/]', re.UNICODE)
+_re_backslash = re.compile(r'[\\]', re.UNICODE)
+_re_forwardslash = re.compile(r'[/]', re.UNICODE)
 def sanitize_filename(string, repl="_"):
-    return _re_slashes.sub(repl, string)
+    string = _re_backslash.sub(u"\uff3c", string)
+    string = _re_forwardslash.sub(u"\u2215", string)
+    return string
 
 
 def _reverse_sortname(sortname):
