@@ -256,6 +256,11 @@ class Album(DataObject, Item):
         self.errors.append(msg)
 
     def _finalize_loading(self, error):
+        if not hasattr(self, '_new_metadata'):
+            self._new_metadata = Metadata()
+        if not hasattr(self, '_new_tracks'):
+            self._new_tracks = []
+
         if error:
             self.metadata.clear()
             self.status = _("[could not load album %s]") % self.id
