@@ -133,6 +133,7 @@ class MP4File(File):
         tags = file.tags
         if tags is None:
             file.add_tags()
+            tags = file.tags
 
         metadata = Metadata()
         for name, values in tags.items():
