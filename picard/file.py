@@ -503,6 +503,9 @@ class File(QtCore.QObject, Item):
         if (os.path.exists(new_filename + ext)):
             raise Exception('File already exists')
 
+        if (ext != '.mp3' and os.path.exists(new_filename + '.mp3')):
+            raise Exception('MP3 already exists')
+
         new_filename = new_filename + ext
         log.debug("Moving file %r => %r", old_filename, new_filename)
         move_ensure_casing(old_filename, new_filename)
